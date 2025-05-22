@@ -2,7 +2,9 @@ import docker
 import os
 import time
 
-client = docker.from_env()
+#client = docker.from_env()
+client = docker.DockerClient(base_url='unix:///var/run/docker.sock')
+
 container_map = {}  # In-memory structure: container_name -> {url, timestamp, id}
 
 TIMEOUT_SECONDS = 1800  # 30 minutes
