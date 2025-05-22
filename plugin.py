@@ -5,7 +5,7 @@ from .models import DockerChallenge
 from .views import admin_docker_challenges
 
 def docker_challenges_override(app):
-    # Register the challenge type
+    # Register challenge type
     CHALLENGE_CLASSES["docker"] = DockerChallenge
     
     # Create admin blueprint
@@ -19,7 +19,8 @@ def docker_challenges_override(app):
     # Add admin route
     blueprint.add_url_rule(
         "/admin/docker",
-        view_func=admin_docker_challenges
+        "admin_docker_challenges",
+        admin_docker_challenges
     )
     
     # Register blueprint
