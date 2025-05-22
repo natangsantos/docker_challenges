@@ -88,3 +88,31 @@ def cleanup_expired_containers():
             except:
                 pass
             container_map.pop(name)
+
+def get_running_containers():
+    results = []
+    for name, meta in container_map.items():
+        try:
+            container = client.containers.get(meta['id'])
+            challenge = DockerChallenge.query.filter_by(id=meta['challenge_id']).first()
+            user = Users.query.get(meta['user_id'])
+            
+            results.append({
+                'id': container.id,
+                'short_id': container.id[:12],
+                'challenge_id': meta['challenge_id'],
+                'challenge_name': challenge.name,
+                'user_id': meta['user_id'],
+                'username': user.name,
+                'port': meta['port'],
+                'url': meta['url'],
+                'uptime': pretty_uptime(time.time() - meta['timestamp'])
+            })
+        except:
+            continue
+    return results
+
+def pretty_uptime(seconds):
+    hours, remainder = divmod(seconds, 3600)
+    minutes, seconds = divmod(remainder, 60)
+    return f"{int(hours)}h {int(minutes)}m {int(seconds)}s"
