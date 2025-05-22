@@ -1,9 +1,9 @@
 from CTFd.plugins import register_plugin_assets_directory
 
-print("🐳 Docker Challenges Plugin Loading!")  # DEBUG LINE
+print("🐳 Docker Challenges Plugin Loading!")  # DEBUG
 
 def load(app):
-    print("🔥 Initializing Docker Challenges Plugin!")  # DEBUG LINE
+    print("🔥 Initializing Docker Challenges Plugin!")  # DEBUG
     register_plugin_assets_directory(app, base_path="/plugins/docker_challenges/static/")
     
     try:
