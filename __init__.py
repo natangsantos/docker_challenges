@@ -16,7 +16,7 @@ log = logging.getLogger(__name__)
 
 # --- Plugin Configuration ---
 PLUGIN_NAME = "Docker Container Manager"
-PLUGIN_FOLDER = "ctfd_docker_manager" # Should match the directory name
+PLUGIN_FOLDER = "docker_challenges" # Should match the directory name
 
 # --- Database Models (Optional, if needed for storing container info) ---
 # Example:
@@ -56,9 +56,9 @@ class DockerChallengeType(BaseChallenge):
         'view': 'user/docker_challenge_view.html',
     }
     scripts = { # Scripts used for viewing/updating challenges of this type
-        'create': f'/plugins/{PLUGIN_FOLDER}/assets/js/docker_challenge_create.js',
-        'update': f'/plugins/{PLUGIN_FOLDER}/assets/js/docker_challenge_update.js',
-        'view': f'/plugins/{PLUGIN_FOLDER}/assets/js/docker_challenge_view.js',
+        'create': 'js/docker_challenge_create.js',
+        'update': 'js/docker_challenge_update.js',
+        'view': 'js/docker_challenge_view.js',
     }
     # Route specifies where the plugin serves assets from
     route = f'/plugins/{PLUGIN_FOLDER}/assets/'
@@ -205,36 +205,33 @@ class DockerChallengeType(BaseChallenge):
 # --- CTFd Plugin Loading ---
 def load(app):
     log.info(f"Loading {PLUGIN_NAME} plugin")
-    app.db.create_all() # Create tables if they don't exist (if using DB models)
+    app.db.create_all() # Create tables if they don't exist
 
-    # Register the custom challenge type
-    DockerChallengeType.blueprint = Blueprint(
-        DockerChallengeType.id,
+    # Create blueprint for the challenge type FIRST
+    challenge_bp = Blueprint(
+        DockerChallengeType.id, # 'docker'
         __name__,
         template_folder="templates",
         static_folder="assets",
-        url_prefix=DockerChallengeType.route
+        url_prefix=DockerChallengeType.route # Serves static assets
     )
+    DockerChallengeType.blueprint = challenge_bp # Assign to class
+
+    # Register the challenge type class and its blueprint
     CHALLENGE_CLASSES[DockerChallengeType.id] = DockerChallengeType
-    app.register_blueprint(DockerChallengeType.blueprint)
+    app.register_blueprint(challenge_bp)
 
-    # Register assets (No longer needed explicitly for challenge types with blueprints)
-    # register_plugin_assets_directory(app, base_path=f'/plugins/{PLUGIN_FOLDER}/assets/')
-
-    # Register admin menu bar link (No longer needed explicitly, handled by config.json route and blueprint)
-    # register_admin_plugin_menu_bar(PLUGIN_NAME, f'/admin/plugins/{PLUGIN_FOLDER}')
-
-    # --- Admin Configuration Route --- (Defined via Blueprint below)
-    # @app.route(f'/admin/plugins/{PLUGIN_FOLDER}', methods=['GET', 'POST'])
-    # @admins_only
-    def admin_config_page():
+    # --- Admin Configuration Route Function ---
+    @admins_only
+    def admin_config_page_func(): # Renamed function slightly for clarity
         if request.method == 'POST':
             # Save settings logic here (using CTFd.utils.config.set_config)
             # Example:
             # ctfd_config.set_config('docker_manager:docker_host', request.form.get('docker_host'))
             # ctfd_config.set_config('docker_manager:default_timeout', request.form.get('default_timeout'))
             flash(f'{PLUGIN_NAME} settings updated successfully!', 'success')
-            return redirect(url_for(f'{PLUGIN_FOLDER}_admin.admin_config_page')) # Use blueprint name
+            # Use the correct endpoint name for url_for
+            return redirect(url_for(f'{PLUGIN_FOLDER}_admin_config.admin_config_page_view'))
 
         # Load settings for display (using CTFd.utils.config.get_config)
         # Example:
@@ -243,11 +240,31 @@ def load(app):
         #     'default_timeout': ctfd_config.get_config('docker_manager:default_timeout')
         # }
         config = {} # Placeholder
-        return render_template('config.html', config=config)
+        return render_template("docker_manager_config.html", config=config)
 
-    # Create a blueprint for admin routes if needed for namespacing
-    admin_bp = Blueprint(f'{PLUGIN_FOLDER}_admin', __name__, url_prefix=f'/admin/plugins/{PLUGIN_FOLDER}')
-    admin_bp.add_url_rule('', 'admin_config_page', admin_config_page, methods=['GET', 'POST'])
+    # Create and register the blueprint for admin configuration routes
+    admin_bp = Blueprint(
+        f'{PLUGIN_FOLDER}_admin_config', # More specific blueprint name
+        __name__,
+        template_folder="templates", # This blueprint also looks in 'templates'
+        url_prefix=f'/admin/plugins/{PLUGIN_FOLDER}'
+    )
+    admin_bp.add_url_rule('', 'admin_config_page_view', admin_config_page_func, methods=['GET', 'POST'])
+    app.register_blueprint(admin_bp)   # Register assets (No longer needed explicitly for challenge types with blueprints)
+    # register_plugin_assets_directory(app, base_path=f'/plugins/{PLUGIN_FOLDER}/assets/')
+
+    # Register admin menu bar link (No longer needed explicitly, handled by config.json route and blueprint)
+    # register_admin_plugin_menu_bar(PLUGIN_NAME, f'/admin/plugins/{PLUGIN_FOLDER}')
+
+    # Create and register the blueprint for admin configuration routes
+    admin_bp = Blueprint(
+        f'{PLUGIN_FOLDER}_admin_config', # More specific blueprint name
+        __name__,
+        template_folder="templates",
+        url_prefix=f'/admin/plugins/{PLUGIN_FOLDER}'
+    )
+    # Add the rule using the function defined above and a specific endpoint name
+    admin_bp.add_url_rule('', 'admin_config_page_view', admin_config_page_func, methods=['GET', 'POST'])
     app.register_blueprint(admin_bp)
 
 
