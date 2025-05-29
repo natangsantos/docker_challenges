@@ -256,16 +256,7 @@ def load(app):
     # Register admin menu bar link (No longer needed explicitly, handled by config.json route and blueprint)
     # register_admin_plugin_menu_bar(PLUGIN_NAME, f'/admin/plugins/{PLUGIN_FOLDER}')
 
-    # Create and register the blueprint for admin configuration routes
-    admin_bp = Blueprint(
-        f'{PLUGIN_FOLDER}_admin_config', # More specific blueprint name
-        __name__,
-        template_folder="templates",
-        url_prefix=f'/admin/plugins/{PLUGIN_FOLDER}'
-    )
-    # Add the rule using the function defined above and a specific endpoint name
-    admin_bp.add_url_rule('', 'admin_config_page_view', admin_config_page_func, methods=['GET', 'POST'])
-    app.register_blueprint(admin_bp)
+
 
 
     # --- API Endpoint for Starting Container (called from challenge view JS) ---

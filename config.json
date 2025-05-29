@@ -2,7 +2,7 @@
     "name": "Docker Container Manager",
     "description": "Manages Docker containers for specific challenges, spawning an instance when a competitor starts the challenge.",
     "version": "0.1.0",
-    "authors": ["NGS"],
+    "authors": ["Manus"],
     "website": "",
     "route": "/admin/plugins/ctfd_docker_manager",
     "requirements": ["docker"]

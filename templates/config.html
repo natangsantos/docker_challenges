@@ -1,0 +1,34 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+<div class="jumbotron">
+    <div class="container">
+        <h1>Docker Container Manager Settings</h1>
+        <p>Configuration options for the Docker Container Manager plugin.</p>
+        <!-- Configuration form will go here -->
+        <form method="post">
+            <input type="hidden" name="nonce" value="{{ nonce() }}">
+            <p><i>Configuration options coming soon...</i></p>
+            <!-- Example: Docker Socket Path -->
+            <!-- <div class="form-group">
+                <label for="docker_socket_path">Docker Socket Path</label>
+                <input type="text" class="form-control" id="docker_socket_path" name="docker_socket_path" value="{{ config.docker_socket_path | default('/var/run/docker.sock') }}">
+                <small class="form-text text-muted">Path to the Docker Unix socket or TCP address (e.g., tcp://127.0.0.1:2375).</small>
+            </div> -->
+            <!-- <button type="submit" class="btn btn-primary">Save Settings</button> -->
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<!-- Add custom JS for the config page if needed -->
+<!-- <script defer src="{{ url_for('ctfd_docker_manager_admin.static', filename='config.js') }}"></script> -->
+{% endblock %}
+
+{% block stylesheets %}
+{{ super() }}
+<!-- Add custom CSS for the config page if needed -->
+<!-- <link rel="stylesheet" type="text/css" href="{{ url_for('ctfd_docker_manager_admin.static', filename='config.css') }}"> -->
+{% endblock %}
