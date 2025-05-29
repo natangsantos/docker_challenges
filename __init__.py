@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 from CTFd.utils.decorators import admins_only, authed_only
-from CTFd.utils.plugins import register_plugin_assets_directory, register_admin_plugin_menu_bar
+from CTFd.utils.plugins import register_admin_plugin_menu_bar
 from CTFd.utils.user import get_current_user, get_current_team
 from CTFd.utils import config as ctfd_config
 from CTFd.models import db, Challenges, Solves, Fails, Flags, Tags, Files, ChallengeFiles, Hints, Awards # Import necessary models
@@ -16,7 +16,7 @@ log = logging.getLogger(__name__)
 
 # --- Plugin Configuration ---
 PLUGIN_NAME = "Docker Container Manager"
-PLUGIN_FOLDER = "ctfd_docker_manager" # Should match the directory name
+PLUGIN_FOLDER = "docker_challenges" # Should match the directory name
 
 # --- Database Models (Optional, if needed for storing container info) ---
 # Example:
@@ -218,8 +218,8 @@ def load(app):
     CHALLENGE_CLASSES[DockerChallengeType.id] = DockerChallengeType
     app.register_blueprint(DockerChallengeType.blueprint)
 
-    # Register assets
-    register_plugin_assets_directory(app, base_path=f'/plugins/{PLUGIN_FOLDER}/assets/')
+    # Register assets (No longer needed explicitly for challenge types with blueprints)
+    # register_plugin_assets_directory(app, base_path=f'/plugins/{PLUGIN_FOLDER}/assets/')
 
     # Register admin menu bar link
     register_admin_plugin_menu_bar(PLUGIN_NAME, f'/admin/plugins/{PLUGIN_FOLDER}')
