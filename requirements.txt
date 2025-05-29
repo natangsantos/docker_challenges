@@ -1,3 +1,1 @@
-APScheduler==3.10.1
-docker==7.0.0
-tenacity
+docker

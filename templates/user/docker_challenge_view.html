@@ -1,0 +1,29 @@
+{% extends "challenges/view.html" %}
+
+{% block challenge_content %}
+<div class="challenge-description">
+    {{ challenge.html | safe }}
+</div>
+
+<hr>
+
+<div id="docker-instance-controls">
+    <h4>Challenge Instance</h4>
+    <button id="start-instance-btn" class="btn btn-primary" data-challenge-id="{{ challenge.id }}">Start Instance</button>
+    <div id="instance-status" class="mt-3" style="display: none;">
+        <p><strong>Status:</strong> <span id="status-message"></span></p>
+        <div id="connection-info"></div>
+    </div>
+    <div id="instance-error" class="alert alert-danger mt-3" role="alert" style="display: none;">
+        Error: <span id="error-message"></span>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{# Include the specific JS for this challenge type view #}
+<script defer src="{{ url_for(challenge.type, filename=\'js/docker_challenge_view.js\') }}"></script>
+{% endblock %}
+

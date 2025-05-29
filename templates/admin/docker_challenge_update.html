@@ -1,0 +1,44 @@
+{% extends "admin/challenges/update.html" %}
+
+{% block type_options %}
+<div id="docker-challenge-options">
+    <input type="hidden" name="id" value="{{ challenge.id }}">
+    <div class="form-group">
+        <label for="docker_image">Docker Image<br>
+            <small class="form-text text-muted">Required. The full name of the Docker image to use (e.g., `ubuntu:latest`, `nginx`, `registry/repo/image:tag`).</small>
+        </label>
+        <input type="text" class="form-control" id="docker_image" name="docker_image" placeholder="e.g., ubuntu:latest" value="{{ challenge.docker_image }}" required>
+    </div>
+    <div class="form-group">
+        <label for="docker_ports">Ports Mapping (Container:Host / Protocol)<br>
+            <small class="form-text text-muted">Optional. Comma-separated list of ports to expose. Format: `container_port/protocol:host_port` or `container_port/protocol` for dynamic host port. Default protocol is tcp. Example: `80/tcp:8080, 22/tcp`</small>
+        </label>
+        <input type="text" class="form-control" id="docker_ports" name="docker_ports" placeholder="e.g., 80/tcp:8080, 22/tcp" value="{{ challenge.docker_ports }}">
+    </div>
+     <div class="form-group">
+        <label for="docker_env">Environment Variables<br>
+            <small class="form-text text-muted">Optional. Comma-separated list of environment variables. Format: `KEY1=VALUE1,KEY2=VALUE2`</small>
+        </label>
+        <input type="text" class="form-control" id="docker_env" name="docker_env" placeholder="e.g., FLAG=flag{...},PORT=80" value="{{ challenge.docker_env }}">
+    </div>
+    <div class="form-group">
+        <label for="docker_cpu_limit">CPU Limit<br>
+            <small class="form-text text-muted">Optional. CPU limit for the container (e.g., `0.5` for half a core, `1` for one core).</small>
+        </label>
+        <input type="text" class="form-control" id="docker_cpu_limit" name="docker_cpu_limit" placeholder="e.g., 0.5" value="{{ challenge.docker_cpu_limit }}">
+    </div>
+    <div class="form-group">
+        <label for="docker_mem_limit">Memory Limit<br>
+            <small class="form-text text-muted">Optional. Memory limit for the container (e.g., `512m`, `1g`).</small>
+        </label>
+        <input type="text" class="form-control" id="docker_mem_limit" name="docker_mem_limit" placeholder="e.g., 512m" value="{{ challenge.docker_mem_limit }}">
+    </div>
+    <div class="form-group">
+        <label for="docker_timeout">Instance Timeout (seconds)<br>
+            <small class="form-text text-muted">Optional. Time in seconds before the container instance is automatically stopped. Default: 3600 (1 hour).</small>
+        </label>
+        <input type="number" class="form-control" id="docker_timeout" name="docker_timeout" placeholder="3600" value="{{ challenge.docker_timeout }}">
+    </div>
+</div>
+{% endblock %}
+
