@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 from CTFd.utils.decorators import admins_only, authed_only
+
 from CTFd.utils.user import get_current_user, get_current_team
 from CTFd.utils import config as ctfd_config
 from CTFd.models import db, Challenges, Solves, Fails, Flags, Tags, Files, ChallengeFiles, Hints, Awards # Import necessary models
@@ -242,7 +243,7 @@ def load(app):
         #     'default_timeout': ctfd_config.get_config('docker_manager:default_timeout')
         # }
         config = {} # Placeholder
-        return render_template(f'plugins/{PLUGIN_FOLDER}/templates/config.html', config=config)
+        return render_template('config.html', config=config)
 
     # Create a blueprint for admin routes if needed for namespacing
     admin_bp = Blueprint(f'{PLUGIN_FOLDER}_admin', __name__, url_prefix=f'/admin/plugins/{PLUGIN_FOLDER}')
