@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
 from CTFd.utils.decorators import admins_only, authed_only
-from CTFd.utils.plugins import register_admin_plugin_menu_bar
 from CTFd.utils.user import get_current_user, get_current_team
 from CTFd.utils import config as ctfd_config
 from CTFd.models import db, Challenges, Solves, Fails, Flags, Tags, Files, ChallengeFiles, Hints, Awards # Import necessary models
@@ -221,8 +220,8 @@ def load(app):
     # Register assets (No longer needed explicitly for challenge types with blueprints)
     # register_plugin_assets_directory(app, base_path=f'/plugins/{PLUGIN_FOLDER}/assets/')
 
-    # Register admin menu bar link
-    register_admin_plugin_menu_bar(PLUGIN_NAME, f'/admin/plugins/{PLUGIN_FOLDER}')
+    # Register admin menu bar link (No longer needed explicitly, handled by config.json route and blueprint)
+    # register_admin_plugin_menu_bar(PLUGIN_NAME, f'/admin/plugins/{PLUGIN_FOLDER}')
 
     # --- Admin Configuration Route --- (Placeholder for now)
     @app.route(f'/admin/plugins/{PLUGIN_FOLDER}', methods=['GET', 'POST'])
