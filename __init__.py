@@ -16,7 +16,7 @@ log = logging.getLogger(__name__)
 
 # --- Plugin Configuration ---
 PLUGIN_NAME = "Docker Container Manager"
-PLUGIN_FOLDER = "docker_challenges" # Should match the directory name
+PLUGIN_FOLDER = "ctfd_docker_manager" # Should match the directory name
 
 # --- Database Models (Optional, if needed for storing container info) ---
 # Example:
@@ -51,9 +51,9 @@ class DockerChallengeType(BaseChallenge):
     id = "docker" # Unique identifier for the challenge type
     name = "docker" # Name displayed in the UI
     templates = { # Templates used for viewing/updating challenges of this type
-        'create': f'/plugins/{PLUGIN_FOLDER}/templates/admin/docker_challenge_create.html',
-        'update': f'/plugins/{PLUGIN_FOLDER}/templates/admin/docker_challenge_update.html',
-        'view': f'/plugins/{PLUGIN_FOLDER}/templates/user/docker_challenge_view.html',
+        'create': 'admin/docker_challenge_create.html',
+        'update': 'admin/docker_challenge_update.html',
+        'view': 'user/docker_challenge_view.html',
     }
     scripts = { # Scripts used for viewing/updating challenges of this type
         'create': f'/plugins/{PLUGIN_FOLDER}/assets/js/docker_challenge_create.js',
@@ -224,9 +224,9 @@ def load(app):
     # Register admin menu bar link (No longer needed explicitly, handled by config.json route and blueprint)
     # register_admin_plugin_menu_bar(PLUGIN_NAME, f'/admin/plugins/{PLUGIN_FOLDER}')
 
-    # --- Admin Configuration Route --- (Placeholder for now)
-    @app.route(f'/admin/plugins/{PLUGIN_FOLDER}', methods=['GET', 'POST'])
-    @admins_only
+    # --- Admin Configuration Route --- (Defined via Blueprint below)
+    # @app.route(f'/admin/plugins/{PLUGIN_FOLDER}', methods=['GET', 'POST'])
+    # @admins_only
     def admin_config_page():
         if request.method == 'POST':
             # Save settings logic here (using CTFd.utils.config.set_config)
